@@ -35,7 +35,8 @@ public class ZUpdate {
     private boolean isUseSystemDownloader = false;          //是否使用系统下载器下载
     private boolean isDownloadSilent      = false;          //静默下载
     private boolean isSilent              = true;           //是否静默检测
-    private HashMap<String, String>       updateApply;      //检测更新请求报文参数
+    private HashMap<String, String>       mapUpdateApply;      //检测更新请求报文参数
+    private Object                        objectUpdateApply;//检测更新请求报文参数
     private Class<? extends ZUpdateReply> updateReplyClass; //检测更新回复报文class
     private String                        updateUrl;        //检测更新地址
 
@@ -63,7 +64,15 @@ public class ZUpdate {
      * 设置检测更新请求参数，如果未设置，使用默认{"versionName":versionName,"versionCode":"versionCode", "terminal":"android"} 检测
      */
     public ZUpdate setUpdateApply(HashMap<String, String> apply) {
-        this.updateApply = apply;
+        this.mapUpdateApply = apply;
+        return this;
+    }
+
+    /**
+     * 设置检测更新请求参数，使用实体类进行参数封装。
+     */
+    public ZUpdate setUpdateApply(Object apply) {
+        this.objectUpdateApply = apply;
         return this;
     }
 
@@ -100,20 +109,6 @@ public class ZUpdate {
     }
 
     /**
-     * 获取更新参数
-     */
-    private HashMap<String, String> getUpdateApply() {
-        if (this.updateApply == null) {
-            this.updateApply = new HashMap<>(3);
-            this.updateApply.put("versionName", AppUtil.getVersionName(BaseApp.APP_CONTEXT));
-            this.updateApply.put("versionCode", String.valueOf(AppUtil.getVersionCode(BaseApp.APP_CONTEXT)));
-            this.updateApply.put("terminal", "android");
-        }
-        return this.updateApply;
-    }
-
-
-    /**
      * 检查版本更新, 使用默认新版本监听器
      */
     public void checkVersion(final Activity acty) {
@@ -131,8 +126,7 @@ public class ZUpdate {
             return;
         }
 
-        HashMap<String, String> apply = getUpdateApply();
-        ZHttp.get(updateUrl, apply, new ZStringResponse(isSilent ? null : acty) {
+        ZStringResponse response = new ZStringResponse(isSilent ? null : acty) {
             @Override
             public void onSuccess(Response response, String res) {
                 ZUpdateReply reply;
@@ -161,7 +155,26 @@ public class ZUpdate {
                     ToastUtil.toastShort(getError(e, code));
                 }
             }
-        });
+        };
+
+        if (objectUpdateApply != null) {
+            ZHttp.get(updateUrl, objectUpdateApply, response);
+        } else if (this.mapUpdateApply != null) {
+            ZHttp.get(updateUrl, mapUpdateApply, response);
+        } else {
+            ZHttp.get(updateUrl, getDefUpdateApply(), response);
+        }
+    }
+
+    /**
+     * 获取默认更新参数
+     */
+    private HashMap<String, String> getDefUpdateApply() {
+        HashMap<String, String> mapApply = new HashMap<>(3);
+        mapApply.put("versionName", AppUtil.getVersionName(BaseApp.APP_CONTEXT));
+        mapApply.put("versionCode", String.valueOf(AppUtil.getVersionCode(BaseApp.APP_CONTEXT)));
+        mapApply.put("terminal", "android");
+        return mapApply;
     }
 
     private String getError(Exception ex, int code) {
