@@ -5,9 +5,6 @@
 ##### dependencies
 ```
 dependencies {
-    implementation "com.android.support:appcompat-v7:$supprotVersion"
-    implementation "com.android.support:design:$supprotVersion"
-    implementation "com.android.support:recyclerview-v7:$supprotVersion"
     implementation "com.github.zcolin:ZFrame:version"//程序框架 
     implementation "com.github.zcolin:ZUILib:version"//UI库
     implementation 'com.github.zcolin.ZGather:libUpdate:latest.release'
