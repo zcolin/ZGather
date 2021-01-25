@@ -28,8 +28,8 @@ dependencies {
     compileOnly 'androidx.appcompat:appcompat:1.0.2'
     compileOnly 'com.google.android.material:material:1.0.0'
     compileOnly 'androidx.recyclerview:recyclerview:1.0.0'
-    compileOnly "com.github.zcolin:ZFrame:2.1.4"//程序框架
-    compileOnly "com.github.zcolin:ZUILib:2.0.2"//UI库
+    compileOnly "com.github.zcolin:ZFrame:3.0.0"//程序框架
+    compileOnly "com.github.zcolin:ZUILib:3.0.0"//UI库
 }
 
 apply from: './javadoc.gradle'
