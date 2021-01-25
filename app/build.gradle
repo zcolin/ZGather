@@ -23,6 +23,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation "com.github.zcolin:ZFrame:2.1.4"//程序框架
-    implementation "com.github.zcolin:ZUILib:2.0.2"//UI库
+    implementation "com.github.zcolin:ZFrame:3.0.0"//程序框架
+    implementation "com.github.zcolin:ZUILib:3.0.0"//UI库
 }
